@@ -8,50 +8,59 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing:border-box; margin:0; padding:0; }
-    :root { --navy:#0D1B2A; --navy2:#162436; --navy3:#1e3148; --gold:#C8A84B; --light-gold:#EDD98A; --muted:#a0c0d8; --btn:#4a2a7a; --btn-hover:#7a4aaa; }
+    :root {
+      --navy:#0D1B2A; --navy2:#162436; --navy3:#1e3148;
+      --gold:#C8A84B; --light-gold:#EDD98A; --muted:#a0c0d8;
+      --btn:#4a2a7a; --btn-hover:#7a4aaa;
+    }
     body { background:var(--navy); min-height:100vh; color:#fff; font-family:'Noto Serif KR',Georgia,serif; }
     button { cursor:pointer; font-family:'Noto Sans KR',sans-serif; font-weight:700; border:none; border-radius:4px; color:#fff !important; }
 
+    /* NAV */
     nav { background:#080f18; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:60px; position:sticky; top:0; z-index:100; border-bottom:2px solid var(--gold); }
     .nav-logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
-    .nav-logo-badge { background:var(--gold); font-weight:700; font-size:14px; padding:4px 10px; border-radius:4px; letter-spacing:1px; }
+    .nav-logo-badge { background:var(--gold); color:#fff !important; font-weight:700; font-size:14px; padding:4px 10px; border-radius:4px; letter-spacing:1px; }
     .nav-logo-text { color:#fff; font-size:13px; font-weight:500; font-family:'Noto Sans KR',sans-serif; }
     .nav-links { display:flex; gap:0.5rem; align-items:center; }
-    .nav-link { background:var(--btn); font-size:13px; padding:7px 14px; transition:background 0.15s; }
+    .nav-link { background:var(--btn); color:#fff !important; font-size:13px; padding:7px 14px; transition:background 0.15s; }
     .nav-link:hover { background:var(--btn-hover); }
-    .nav-btn { background:var(--gold); font-size:13px; padding:7px 16px; transition:background 0.15s; }
+    .nav-btn { background:var(--gold); color:#fff !important; font-size:13px; padding:7px 16px; transition:background 0.15s; }
     .nav-btn:hover { background:#e0b84a; }
     .nav-user { display:flex; align-items:center; gap:10px; color:#fff; font-size:13px; font-weight:700; font-family:'Noto Sans KR',sans-serif; }
     .nav-user-avatar { width:30px; height:30px; border-radius:50%; background:var(--gold); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; }
-    .nav-logout { background:var(--btn); font-size:12px; padding:5px 12px; transition:background 0.15s; }
+    .nav-logout { background:var(--btn); color:#fff !important; font-size:12px; padding:5px 12px; transition:background 0.15s; }
     .nav-logout:hover { background:var(--btn-hover); }
 
+    /* PAGES */
     .page { display:none; } .page.active { display:block; }
 
+    /* HERO */
     .hero { background:linear-gradient(160deg,#080f18 55%,#0d2035 100%); padding:5rem 2rem 4rem; text-align:center; }
     .hero-eyebrow { font-size:12px; letter-spacing:3px; color:var(--gold); margin-bottom:1rem; text-transform:uppercase; font-weight:700; font-family:'Noto Sans KR',sans-serif; }
     .hero h1 { font-size:3rem; font-weight:700; line-height:1.1; margin-bottom:0.5rem; }
-    .hero h1 .gold { color:var(--gold); }
-    .hero h1 .white { color:#fff; }
+    .hero h1 span { color:var(--gold); }
     .hero-sub { font-size:1rem; margin-bottom:0.5rem; font-family:'Noto Sans KR',sans-serif; font-weight:600; }
     .hero-tagline { font-size:1.1rem; color:#cde; margin-bottom:2.5rem; font-style:italic; }
     .hero-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
-    .btn-primary { background:var(--gold); font-size:14px; padding:12px 28px; transition:background 0.15s; }
+    .btn-primary { background:var(--gold); color:#fff !important; font-size:14px; padding:12px 28px; transition:background 0.15s; }
     .btn-primary:hover { background:#e0b84a; }
-    .btn-outline { background:var(--btn); font-size:14px; padding:12px 28px; transition:background 0.15s; }
+    .btn-outline { background:var(--btn); color:#fff !important; font-size:14px; padding:12px 28px; transition:background 0.15s; }
     .btn-outline:hover { background:var(--btn-hover); }
 
+    /* STATS */
     .stats-bar { background:#080f18; display:flex; justify-content:center; gap:3rem; padding:1.5rem 2rem; border-top:1px solid rgba(200,168,75,0.4); }
     .stat { text-align:center; }
     .stat-num { font-size:1.6rem; font-weight:700; color:var(--gold); }
     .stat-label { font-size:11px; color:#aac; font-family:'Noto Sans KR',sans-serif; letter-spacing:1px; font-weight:600; }
 
+    /* SECTION */
     .section { padding:3rem 2rem; max-width:900px; margin:0 auto; }
     .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; border-bottom:2px solid var(--gold); padding-bottom:0.75rem; }
     .section-title { font-size:1.5rem; font-weight:700; }
-    .section-action { background:var(--btn); font-size:13px; padding:6px 14px; transition:background 0.15s; }
+    .section-action { background:var(--btn); color:#fff !important; font-size:13px; padding:6px 14px; transition:background 0.15s; }
     .section-action:hover { background:var(--btn-hover); }
 
+    /* STORY CARDS */
     .story-grid { display:flex; flex-direction:column; gap:1.25rem; }
     .story-card { background:var(--navy2); border-radius:8px; border:1px solid #2a4060; padding:1.25rem 1.5rem; cursor:pointer; transition:border-color 0.2s; }
     .story-card:hover { border-color:var(--gold); }
@@ -63,7 +72,8 @@
     .story-excerpt { font-size:14px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; line-height:1.7; }
     .story-tag { display:inline-block; margin-top:0.6rem; background:rgba(200,168,75,0.2); color:var(--light-gold); font-size:12px; padding:3px 10px; border-radius:20px; font-family:'Noto Sans KR',sans-serif; font-weight:700; border:1px solid rgba(200,168,75,0.4); }
 
-    .btn-write { background:var(--gold); font-size:13px; padding:7px 16px; transition:background 0.15s; }
+    /* WRITE */
+    .btn-write { background:var(--gold); color:#fff !important; font-size:13px; padding:7px 16px; transition:background 0.15s; }
     .btn-write:hover { background:#e0b84a; }
     .write-area { background:var(--navy2); border-radius:8px; border:1px solid #2a4060; padding:2rem; }
     .form-field { margin-bottom:1.25rem; }
@@ -72,54 +82,69 @@
     .form-input:focus { outline:none; border-color:var(--gold); }
     .form-input::placeholder { color:#6888a0; }
     .form-textarea { min-height:200px; resize:vertical; line-height:1.7; }
-    .btn-submit { background:var(--gold); font-size:14px; padding:12px 32px; transition:background 0.15s; }
+    .btn-submit { background:var(--gold); color:#fff !important; font-size:14px; padding:12px 32px; transition:background 0.15s; }
     .btn-submit:hover { background:#e0b84a; }
-    .btn-cancel { background:var(--btn); font-size:13px; padding:12px 24px; margin-left:12px; transition:background 0.15s; }
+    .btn-cancel { background:var(--btn); color:#fff !important; font-size:13px; padding:12px 24px; margin-left:12px; transition:background 0.15s; }
     .btn-cancel:hover { background:var(--btn-hover); }
 
+    /* MODAL */
     .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; z-index:200; padding:1rem; }
     .modal-box { background:var(--navy2); border-radius:12px; padding:2.5rem 2rem; width:100%; max-width:420px; border:1px solid #2a4060; border-top:4px solid var(--gold); }
     .modal-title { font-size:1.4rem; font-weight:700; margin-bottom:0.3rem; }
     .modal-subtitle { font-size:13px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; margin-bottom:1.75rem; font-weight:600; }
     .modal-tabs { display:flex; margin-bottom:1.5rem; border-radius:6px; overflow:hidden; border:1px solid #2a4060; }
-    .modal-tab { flex:1; padding:10px; text-align:center; font-size:13px; background:var(--btn); transition:background 0.15s; }
+    .modal-tab { flex:1; padding:10px; text-align:center; font-size:13px; background:var(--btn); color:#fff !important; transition:background 0.15s; }
     .modal-tab.active { background:var(--gold); }
     .modal-tab:hover:not(.active) { background:var(--btn-hover); }
     .form-hint { font-size:12px; color:var(--muted); margin-top:4px; font-family:'Noto Sans KR',sans-serif; }
     .auth-switch { text-align:center; font-size:13px; color:#cde; margin-top:1rem; font-family:'Noto Sans KR',sans-serif; font-weight:600; }
     .auth-switch span { color:var(--gold); cursor:pointer; font-weight:700; }
-    .btn-login { width:100%; margin-top:0.5rem; background:var(--gold); font-size:14px; padding:12px; border-radius:4px; transition:background 0.15s; }
+    .btn-login { width:100%; margin-top:0.5rem; background:var(--gold); color:#fff !important; font-size:14px; padding:12px; border-radius:4px; transition:background 0.15s; }
     .btn-login:hover { background:#e0b84a; }
 
+    /* ABOUT */
     .about-hero { background:#080f18; padding:3rem 2rem; text-align:center; border-bottom:3px solid var(--gold); }
     .about-hero h2 { font-size:2rem; margin-bottom:0.5rem; }
     .about-hero p { color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:600; }
     .about-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.25rem; margin-top:2rem; }
+
+    /* 회장단 카드 */
+    .officer-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-bottom:2.5rem; }
+    .officer-card { background:linear-gradient(135deg,#1e3148,#2a1a4a); border-radius:12px; border:2px solid #C8A84B; padding:1.75rem; display:flex; align-items:center; gap:1.5rem; }
+    .officer-avatar { flex-shrink:0; text-align:center; }
+    .officer-avatar-circle { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#C8A84B,#8a5a1a); display:flex; align-items:center; justify-content:center; font-size:1.7rem; font-weight:700; margin:0 auto 0.5rem; border:3px solid #C8A84B; }
+    .officer-role-badge { background:#C8A84B; color:#0D1B2A; font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; font-family:'Noto Sans KR',sans-serif; letter-spacing:1px; white-space:nowrap; }
+    .officer-name { font-size:1.2rem; font-weight:700; margin-bottom:0.2rem; }
+    .officer-korname { font-size:0.95rem; color:#C8A84B; font-family:'Noto Sans KR',sans-serif; margin-bottom:0.4rem; }
+    .officer-meta { font-size:12px; color:#a0c0d8; font-family:'Noto Sans KR',sans-serif; margin-bottom:0.7rem; }
+    .officer-bio { font-size:13px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; line-height:1.6; }
+
+    /* 공지사항 */
+    .announcement-card { background:var(--navy2); border-radius:8px; border:1px solid #2a4060; border-left:4px solid var(--gold); padding:1.25rem 1.5rem; margin-bottom:1.25rem; }
+    .announcement-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
+    .announcement-title { font-size:1.1rem; font-weight:700; }
+    .announcement-meta { font-size:12px; color:var(--muted); font-family:'Noto Sans KR',sans-serif; }
+    .announcement-body { font-size:14px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; line-height:1.7; white-space:pre-wrap; }
     .about-card { background:var(--navy2); border-radius:8px; border:1px solid #2a4060; padding:1.5rem; text-align:center; }
     .about-icon { font-size:2.5rem; margin-bottom:0.75rem; }
     .about-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.4rem; }
     .about-card p { font-size:13px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; line-height:1.7; }
 
-    .president-card { background:linear-gradient(135deg,#1e3148,#2a1a4a); border-radius:12px; border:2px solid var(--gold); padding:2rem; display:flex; align-items:center; gap:2rem; margin-bottom:2.5rem; }
-    .president-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#8a5a1a); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:700; flex-shrink:0; border:3px solid var(--gold); }
-    .president-badge { display:inline-block; background:var(--gold); color:var(--navy); font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; font-family:'Noto Sans KR',sans-serif; letter-spacing:1px; margin-top:0.5rem; }
-    .president-info h3 { font-size:1.4rem; font-weight:700; margin-bottom:0.2rem; }
-    .president-kor { font-size:1rem; color:var(--gold); font-family:'Noto Sans KR',sans-serif; margin-bottom:0.4rem; }
-    .president-grade { font-size:13px; color:var(--muted); font-family:'Noto Sans KR',sans-serif; margin-bottom:0.8rem; }
-    .president-info p { font-size:14px; color:#d0e8f5; font-family:'Noto Sans KR',sans-serif; line-height:1.7; }
-
+    /* DETAIL */
     .story-detail { max-width:720px; margin:0 auto; padding:2rem; }
     .story-detail-title { font-size:2rem; font-weight:700; margin-bottom:1rem; line-height:1.2; }
     .story-detail-meta { display:flex; align-items:center; gap:12px; margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid #2a4060; }
     .story-detail-body { font-size:16px; line-height:1.9; color:#e8f4ff; }
     .story-detail-body p { margin-bottom:1rem; }
-    .btn-back { background:var(--btn); font-size:14px; padding:7px 16px; margin-bottom:1.5rem; display:inline-flex; align-items:center; gap:6px; transition:background 0.15s; }
+    .btn-back { background:var(--btn); color:#fff !important; font-size:14px; padding:7px 16px; margin-bottom:1.5rem; display:inline-flex; align-items:center; gap:6px; transition:background 0.15s; }
     .btn-back:hover { background:var(--btn-hover); }
 
+    /* BANNERS */
     .success-banner { background:#0a3020; border:1px solid #1a6040; border-radius:6px; padding:12px 16px; margin-bottom:1rem; font-size:14px; color:#80ffb8; font-family:'Noto Sans KR',sans-serif; font-weight:700; display:none; }
     .error-banner { background:#3a0a0a; border:1px solid #6a2020; border-radius:6px; padding:12px 16px; margin-bottom:1rem; font-size:14px; color:#ffaaaa; font-family:'Noto Sans KR',sans-serif; font-weight:700; display:none; }
     .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); background:var(--btn); color:#fff; padding:12px 24px; border-radius:8px; font-family:'Noto Sans KR',sans-serif; font-size:14px; font-weight:700; z-index:300; display:none; }
     .empty-msg { color:#6888a0; font-family:'Noto Sans KR',sans-serif; text-align:center; padding:2rem 0; }
+    .loading-msg { color:#6888a0; font-family:'Noto Sans KR',sans-serif; text-align:center; padding:2rem 0; }
   </style>
 </head>
 <body>
@@ -133,6 +158,7 @@
     <button class="nav-link" onclick="showPage('home')">홈</button>
     <button class="nav-link" onclick="showPage('stories')">스토리</button>
     <button class="nav-link" onclick="showPage('about')">우리 모임</button>
+    <button class="nav-link" onclick="showPage('announcements')">공지사항</button>
     <div id="nav-auth-area"><button class="nav-btn" onclick="openModal('login')">가입 / 로그인</button></div>
   </div>
 </nav>
@@ -141,10 +167,7 @@
 <div id="page-home" class="page active">
   <div class="hero">
     <div class="hero-eyebrow">Rumsey Hall School</div>
-    <h1>
-      <span class="white">Korean</span> <span class="gold">Student</span><br>
-      <span class="white">Association</span>
-    </h1>
+    <h1>Korean <span>Student</span><br>Association</h1>
     <p class="hero-sub">한국학생연합 · KSA</p>
     <p class="hero-tagline">"우리의 이야기를 함께 씁니다"</p>
     <div class="hero-actions">
@@ -162,7 +185,7 @@
       <span class="section-title">최근 스토리</span>
       <button class="section-action" onclick="showPage('stories')">모두 보기 →</button>
     </div>
-    <div class="story-grid" id="home-stories"><p class="empty-msg">아직 스토리가 없어요!</p></div>
+    <div class="story-grid" id="home-stories"><p class="loading-msg">불러오는 중...</p></div>
   </div>
 </div>
 
@@ -187,7 +210,28 @@
         <button class="btn-cancel" onclick="document.getElementById('write-form').style.display='none'">취소</button>
       </div>
     </div>
-    <div class="story-grid" id="all-stories"><p class="empty-msg">아직 스토리가 없어요!</p></div>
+    <div class="story-grid" id="all-stories"><p class="loading-msg">불러오는 중...</p></div>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENTS -->
+<div id="page-announcements" class="page">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">공지사항</span>
+      <button class="btn-write" id="write-announcement-btn" onclick="checkAuthAndWriteAnnouncement()" style="display:none">📢 공지 작성</button>
+    </div>
+    <div id="announcement-form" style="display:none;margin-bottom:2rem;">
+      <div class="write-area">
+        <div class="success-banner" id="announcement-success">공지가 등록되었습니다! 🎉</div>
+        <div class="error-banner" id="announcement-error"></div>
+        <div class="form-field"><label class="form-label">제목</label><input class="form-input" id="announcement-title-input" placeholder="공지 제목을 입력하세요"></div>
+        <div class="form-field"><label class="form-label">내용</label><textarea class="form-input form-textarea" id="announcement-body-input" placeholder="공지 내용을 입력하세요..."></textarea></div>
+        <button class="btn-submit" onclick="submitAnnouncement()">등록하기</button>
+        <button class="btn-cancel" onclick="document.getElementById('announcement-form').style.display='none'">취소</button>
+      </div>
+    </div>
+    <div id="announcement-list"><p class="loading-msg">불러오는 중...</p></div>
   </div>
 </div>
 
@@ -195,35 +239,16 @@
 <div id="page-about" class="page">
   <div class="about-hero"><h2>우리 모임 소개</h2><p>Rumsey Hall School Korean Student Association</p></div>
   <div class="section">
-
-    <!-- 회장 카드 -->
-    <div class="section-header">
-      <span class="section-title">회장 소개</span>
+    <div class="section-header" style="margin-top:0.5rem">
+      <span class="section-title">회장단 소개</span>
     </div>
-    <div class="president-card">
-      <div style="text-align:center;flex-shrink:0;">
-        <div class="president-avatar">J</div>
-        <div><span class="president-badge">PRESIDENT</span></div>
-      </div>
-      <div class="president-info">
-        <h3>Joon</h3>
-        <div class="president-kor">이준성</div>
-        <div class="president-grade">Class of 2028 · Rumsey Hall School</div>
-        <p>안녕하세요! KSA 기획자 이준성입니다. 럼지 홀에서 한국 학생들이 서로 연결되고, 우리의 문화를 함께 나눌 수 있는 공간을 만들고 싶어 KSA를 시작했어요. 궁금한 점이 있으면 언제든지 연락해주세요 🇰🇷</p>
-      </div>
-    </div>
-
-    <!-- 활동 카드 -->
-    <div class="section-header">
-      <span class="section-title">우리가 하는 일</span>
-    </div>
+    <div class="officer-grid" id="officer-grid"></div>
     <div class="about-grid">
       <div class="about-card"><div class="about-icon">🇰🇷</div><h3>한국 문화 공유</h3><p>K-culture, 음식, 언어, 전통을 함께 나누며 한국의 아름다움을 알립니다</p></div>
       <div class="about-card"><div class="about-icon">🤝</div><h3>커뮤니티</h3><p>한국 학생들이 서로 연결되고 지지하는 따뜻한 공동체를 만들어 갑니다</p></div>
       <div class="about-card"><div class="about-icon">📖</div><h3>스토리 공유</h3><p>각자의 경험과 이야기를 나누며 서로를 이해하고 성장합니다</p></div>
       <div class="about-card"><div class="about-icon">🌏</div><h3>글로벌 마인드</h3><p>한국적 정체성을 유지하며 글로벌 시민으로 함께 성장합니다</p></div>
     </div>
-
     <div style="margin-top:2.5rem;background:var(--navy2);border-radius:8px;border:1px solid #2a4060;padding:2rem;">
       <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;">연락하기</h3>
       <p style="font-size:14px;color:#d0e8f5;font-family:'Noto Sans KR',sans-serif;line-height:1.8;">KSA에 관심 있거나 활동에 참여하고 싶다면 언제든지 연락해 주세요.<br>Rumsey Hall School · Washington, CT · KSA</p>
@@ -251,7 +276,7 @@
         <div class="modal-title">다시 만나요 👋</div>
         <div class="modal-subtitle">KSA 계정으로 로그인하세요</div>
         <div class="error-banner" id="login-error"></div>
-        <div class="form-field"><label class="form-label">이름 (Name)</label><input class="form-input" id="login-name" placeholder="가입한 이름 입력"></div>
+        <div class="form-field"><label class="form-label">이메일</label><input class="form-input" id="login-email" type="email" placeholder="이메일 입력"></div>
         <div class="form-field"><label class="form-label">비밀번호</label><input class="form-input" type="password" id="login-pw" placeholder="••••••"></div>
         <button class="btn-login" onclick="doLogin()">로그인</button>
         <div class="auth-switch">아직 회원이 아닌가요? <span onclick="switchTab('signup')">가입하기</span></div>
@@ -259,7 +284,8 @@
       <div id="form-signup">
         <div class="modal-title">KSA에 오신 걸 환영해요 🎉</div>
         <div class="modal-subtitle">간단한 정보로 가입하세요</div>
-        <div class="success-banner" id="signup-success">가입 완료! 환영합니다 🇰🇷</div>
+        <div class="success-banner" id="signup-success">가입 완료! 이메일을 확인해주세요 📧</div>
+        <div class="error-banner" id="signup-error"></div>
         <div class="form-field"><label class="form-label">영문 이름</label><input class="form-input" id="signup-name" placeholder="예: Minjun Kim"></div>
         <div class="form-field"><label class="form-label">한국 이름 (선택)</label><input class="form-input" id="signup-korname" placeholder="예: 김민준"></div>
         <div class="form-field"><label class="form-label">학년</label>
@@ -268,6 +294,7 @@
             <option>6th Grade</option><option>7th Grade</option><option>8th Grade</option><option>9th Grade</option>
           </select>
         </div>
+        <div class="form-field"><label class="form-label">이메일</label><input class="form-input" id="signup-email" type="email" placeholder="학교 이메일"></div>
         <div class="form-field"><label class="form-label">비밀번호</label><input class="form-input" type="password" id="signup-pw" placeholder="6자 이상"></div>
         <button class="btn-login" onclick="doSignup()">가입하기</button>
         <div class="auth-switch">이미 회원인가요? <span onclick="switchTab('login')">로그인</span></div>
@@ -279,40 +306,68 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  // =============================================
+  // ⚠️  여기에 Supabase 정보를 입력하세요!
+  // supabase.com → 프로젝트 → Settings → API
+  // =============================================
   const SUPABASE_URL = 'https://efvbsmsootxkhnhxhtqy.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_pzZNrc87oCPkM2HTEhumcw_Z6mf0Udb';
+  // =============================================
 
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let members = [], stories = [], currentUser = null, nextId = 1;
+  let currentUser = null;
+  let isExecutive = false;
 
-  function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2500); }
-  function getInitials(n) { return n.split(' ').map(x => x[0]).join('').toUpperCase().slice(0, 2); }
-
-  async function loadData() {
-    try {
-      const mRes = await db.from('profiles').select('*');
-      const sRes = await db.from('stories').select('*').order('created_at', { ascending: false });
-      if (mRes.data) members = mRes.data;
-      if (sRes.data) stories = sRes.data;
-    } catch(e) { members = []; stories = []; }
-    updateStats();
-    renderHomeStories();
-  }
-
-  function updateStats() {
-    document.getElementById('member-count').textContent = members.length;
-    document.getElementById('story-count').textContent = stories.length;
-  }
-
-  function renderStoryCard(s, oc) {
-    return `<div class="story-card" onclick="${oc}">
-      <div class="story-card-top">
-        <div class="story-avatar">${getInitials(s.user_name || '?')}</div>
+  // ── 회장단 소개 (profiles 테이블의 role='executive' 계정에서 가져옴) ──
+  async function renderOfficers() {
+    const el = document.getElementById('officer-grid');
+    const { data, error } = await db.from('profiles').select('*').eq('role', 'executive').order('officer_order', { ascending: true });
+    if (error || !data || !data.length) { el.innerHTML = '<p class="empty-msg">회장단 정보가 아직 없어요.</p>'; return; }
+    el.innerHTML = data.map(o => `
+      <div class="officer-card">
+        <div class="officer-avatar">
+          <div class="officer-avatar-circle">${getInitials(o.name)}</div>
+          <span class="officer-role-badge">${o.hobby || ''}</span>
+        </div>
         <div>
-          <div class="story-author">${s.user_name}${s.kor_name ? ' · ' + s.kor_name : ''}</div>
-          <div class="story-date">${s.grade} · ${new Date(s.created_at).toLocaleDateString('ko-KR')}</div>
+          <h3 class="officer-name">${o.name}</h3>
+          <div class="officer-korname">${o.kor_name || ''}</div>
+          <div class="officer-meta">${o.grade || ''} · Rumsey Hall School</div>
+          <p class="officer-bio">${o.officer_bio || ''}</p>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── 유틸 ──────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2500);
+  }
+  function getInitials(n) { return n.split(' ').map(x => x[0]).join('').toUpperCase().slice(0, 2); }
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  }
+
+  // ── 통계 ──────────────────────────────────
+  async function updateStats() {
+    const { count: mc } = await db.from('profiles').select('*', { count: 'exact', head: true });
+    const { count: sc } = await db.from('stories').select('*', { count: 'exact', head: true });
+    document.getElementById('member-count').textContent = mc ?? 0;
+    document.getElementById('story-count').textContent = sc ?? 0;
+  }
+
+  // ── 스토리 카드 ───────────────────────────
+  function renderStoryCard(s, onclick) {
+    return `<div class="story-card" onclick="${onclick}">
+      <div class="story-card-top">
+        <div class="story-avatar">${getInitials(s.name)}</div>
+        <div>
+          <div class="story-author">${s.name}${s.kor_name ? ' · ' + s.kor_name : ''}</div>
+          <div class="story-date">${s.grade} · ${formatDate(s.created_at)}</div>
         </div>
       </div>
       <div class="story-title">${s.title}</div>
@@ -321,26 +376,31 @@
     </div>`;
   }
 
-  function renderHomeStories() {
+  async function loadHomeStories() {
+    const { data } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false }).limit(2);
     const el = document.getElementById('home-stories');
-    el.innerHTML = stories.length ? stories.slice(0, 2).map(s => renderStoryCard(s, `showDetail('${s.id}')`)).join('') : '<p class="empty-msg">아직 스토리가 없어요!</p>';
+    if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">아직 스토리가 없어요!</p>'; return; }
+    el.innerHTML = data.map(s => renderStoryCard({ ...s, ...s.profiles }, `showDetail('${s.id}')`)).join('');
   }
 
-  function renderAllStories() {
+  async function loadAllStories() {
+    const { data } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false });
     const el = document.getElementById('all-stories');
-    el.innerHTML = stories.length ? stories.map(s => renderStoryCard(s, `showDetail('${s.id}')`)).join('') : '<p class="empty-msg">아직 스토리가 없어요!</p>';
+    if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">아직 스토리가 없어요!</p>'; return; }
+    el.innerHTML = data.map(s => renderStoryCard({ ...s, ...s.profiles }, `showDetail('${s.id}')`)).join('');
     document.getElementById('write-story-btn').style.display = currentUser ? 'inline-block' : 'none';
   }
 
-  function showDetail(id) {
-    const s = stories.find(x => x.id === id);
+  async function showDetail(id) {
+    const { data: s } = await db.from('stories').select('*, profiles(name, kor_name, grade)').eq('id', id).single();
     if (!s) return;
+    const p = s.profiles;
     document.getElementById('detail-content').innerHTML = `
       <div class="story-detail-meta">
-        <div class="story-avatar" style="width:44px;height:44px;border-radius:50%;background:#1e3148;border:1px solid #C8A84B;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#C8A84B;">${getInitials(s.user_name || '?')}</div>
+        <div class="story-avatar" style="width:44px;height:44px;border-radius:50%;background:#1e3148;border:1px solid #C8A84B;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#C8A84B;">${getInitials(p.name)}</div>
         <div>
-          <div style="font-weight:700;font-size:15px;font-family:'Noto Sans KR',sans-serif;">${s.user_name}${s.kor_name ? ' · ' + s.kor_name : ''}</div>
-          <div style="font-size:12px;color:#a0c0d8;font-family:'Noto Sans KR',sans-serif;">${s.grade} · ${new Date(s.created_at).toLocaleDateString('ko-KR')}</div>
+          <div style="font-weight:700;font-size:15px;font-family:'Noto Sans KR',sans-serif;">${p.name}${p.kor_name ? ' · ' + p.kor_name : ''}</div>
+          <div style="font-size:12px;color:#a0c0d8;font-family:'Noto Sans KR',sans-serif;">${p.grade} · ${formatDate(s.created_at)}</div>
         </div>
         <span class="story-tag" style="margin-left:auto">${s.category}</span>
       </div>
@@ -349,14 +409,18 @@
     showPage('detail');
   }
 
+  // ── 페이지 전환 ───────────────────────────
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
-    if (name === 'stories') renderAllStories();
-    if (name === 'home') renderHomeStories();
+    if (name === 'stories') loadAllStories();
+    if (name === 'announcements') loadAnnouncements();
+    if (name === 'about') renderOfficers();
+    if (name === 'home') { loadHomeStories(); updateStats(); }
     window.scrollTo(0, 0);
   }
 
+  // ── 모달 ──────────────────────────────────
   function openModal(tab = 'signup') { switchTab(tab); document.getElementById('modal').style.display = 'flex'; }
   function closeModal() { document.getElementById('modal').style.display = 'none'; }
   function handleOverlayClick(e) { if (e.target === document.getElementById('modal')) closeModal(); }
@@ -367,46 +431,65 @@
     document.getElementById('form-signup').style.display = tab === 'signup' ? '' : 'none';
   }
 
+  // ── 네비 업데이트 ─────────────────────────
   function updateNavAuth() {
     const area = document.getElementById('nav-auth-area');
     if (currentUser) {
-      area.innerHTML = `<div class="nav-user"><div class="nav-user-avatar">${getInitials(currentUser.name)}</div><span style="color:#fff">${currentUser.name}</span><button class="nav-logout" onclick="doLogout()">로그아웃</button></div>`;
+      const name = currentUser.user_metadata?.name || currentUser.email;
+      area.innerHTML = `<div class="nav-user"><div class="nav-user-avatar">${getInitials(name)}</div><span>${name}</span><button class="nav-logout" onclick="doLogout()">로그아웃</button></div>`;
     } else {
       area.innerHTML = `<button class="nav-btn" onclick="openModal('login')">가입 / 로그인</button>`;
     }
     updateStats();
   }
 
+  // ── 권한 확인 ─────────────────────────────
+  async function checkExecutiveStatus() {
+    if (!currentUser) { isExecutive = false; return; }
+    const { data } = await db.from('profiles').select('role').eq('id', currentUser.id).single();
+    isExecutive = data?.role === 'executive';
+  }
+
+  // ── 인증 ──────────────────────────────────
   async function doLogin() {
-    const name = document.getElementById('login-name').value.trim();
+    const email = document.getElementById('login-email').value.trim();
     const pw = document.getElementById('login-pw').value;
     const errEl = document.getElementById('login-error');
-    const { data } = await db.from('profiles').select('*').eq('name', name).eq('pw', pw).single();
-    if (!data) { errEl.style.display = 'block'; errEl.textContent = '이름 또는 비밀번호가 맞지 않습니다.'; return; }
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pw });
+    if (error) { errEl.style.display = 'block'; errEl.textContent = '이메일 또는 비밀번호가 틀렸습니다.'; return; }
     errEl.style.display = 'none';
-    currentUser = data;
+    currentUser = data.user;
+    await checkExecutiveStatus();
     updateNavAuth(); closeModal();
-    showToast(`${data.name}님, 환영해요! 👋`);
+    showToast(`환영해요! 👋`);
   }
 
   async function doSignup() {
     const name = document.getElementById('signup-name').value.trim();
     const korName = document.getElementById('signup-korname').value.trim();
     const grade = document.getElementById('signup-grade').value;
+    const email = document.getElementById('signup-email').value.trim();
     const pw = document.getElementById('signup-pw').value;
-    if (!name || !grade || pw.length < 6) { alert('이름, 학년을 입력하고 비밀번호는 6자 이상이어야 합니다.'); return; }
-    const { data: existing } = await db.from('profiles').select('id').eq('name', name).single();
-    if (existing) { alert('이미 가입된 이름입니다.'); return; }
-    const { data, error } = await db.from('profiles').insert({ name, kor_name: korName, grade, pw }).select().single();
-    if (error) { alert('가입 실패: ' + error.message); return; }
-    currentUser = data;
-    members.push(data);
+    const errEl = document.getElementById('signup-error');
+    if (!name || !grade || !email || pw.length < 6) { errEl.style.display = 'block'; errEl.textContent = '모든 필수 항목을 입력해주세요.'; return; }
+    const { data, error } = await db.auth.signUp({
+      email, password: pw,
+      options: { data: { name, kor_name: korName, grade } }
+    });
+    if (error) { errEl.style.display = 'block'; errEl.textContent = error.message; return; }
+    // profiles 테이블에 저장
+    await db.from('profiles').insert({ id: data.user.id, name, kor_name: korName, grade, email });
     document.getElementById('signup-success').style.display = 'block';
-    setTimeout(() => { updateNavAuth(); closeModal(); document.getElementById('signup-success').style.display = 'none'; showToast('가입 완료! KSA에 오신 걸 환영해요 🇰🇷'); }, 1200);
+    setTimeout(() => { closeModal(); document.getElementById('signup-success').style.display = 'none'; }, 2000);
   }
 
-  function doLogout() { currentUser = null; updateNavAuth(); renderAllStories(); showToast('로그아웃 되었습니다.'); }
+  async function doLogout() {
+    await db.auth.signOut();
+    currentUser = null; isExecutive = false; updateNavAuth();
+    showToast('로그아웃 되었습니다.');
+  }
 
+  // ── 스토리 작성 ───────────────────────────
   function checkAuthAndWrite() {
     if (!currentUser) { openModal('login'); return; }
     const f = document.getElementById('write-form');
@@ -418,19 +501,70 @@
     const category = document.getElementById('story-cat-input').value;
     const body = document.getElementById('story-body-input').value.trim();
     if (!title || !body) { alert('제목과 내용을 입력해주세요.'); return; }
-    const { data, error } = await db.from('stories').insert({ user_name: currentUser.name, kor_name: currentUser.kor_name, grade: currentUser.grade, title, body, category }).select().single();
+    const { error } = await db.from('stories').insert({ title, body, category, user_id: currentUser.id });
     if (error) { alert('저장 실패: ' + error.message); return; }
-    stories.unshift(data);
     document.getElementById('story-title-input').value = '';
     document.getElementById('story-body-input').value = '';
     document.getElementById('write-success').style.display = 'block';
     setTimeout(() => document.getElementById('write-success').style.display = 'none', 2000);
     document.getElementById('write-form').style.display = 'none';
-    renderAllStories(); updateStats();
+    loadAllStories(); updateStats();
     showToast('스토리가 저장되었습니다! ✨');
   }
 
-  loadData();
+  // ── 공지사항 ──────────────────────────────
+  function checkAuthAndWriteAnnouncement() {
+    if (!currentUser) { openModal('login'); return; }
+    if (!isExecutive) { showToast('회장단만 공지를 작성할 수 있어요.'); return; }
+    const f = document.getElementById('announcement-form');
+    f.style.display = f.style.display === 'none' ? '' : 'none';
+  }
+
+  function renderAnnouncementCard(a) {
+    return `<div class="announcement-card">
+      <div class="announcement-top">
+        <span class="announcement-title">${a.title}</span>
+        <span class="announcement-meta">${a.profiles?.name ?? ''} · ${formatDate(a.created_at)}</span>
+      </div>
+      <div class="announcement-body">${a.body}</div>
+    </div>`;
+  }
+
+  async function loadAnnouncements() {
+    const { data } = await db.from('announcements').select('*, profiles(name, kor_name)').order('created_at', { ascending: false });
+    const el = document.getElementById('announcement-list');
+    if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">등록된 공지가 없어요!</p>'; return; }
+    el.innerHTML = data.map(renderAnnouncementCard).join('');
+    document.getElementById('write-announcement-btn').style.display = isExecutive ? 'inline-block' : 'none';
+  }
+
+  async function submitAnnouncement() {
+    const title = document.getElementById('announcement-title-input').value.trim();
+    const body = document.getElementById('announcement-body-input').value.trim();
+    const errEl = document.getElementById('announcement-error');
+    if (!title || !body) { errEl.style.display = 'block'; errEl.textContent = '제목과 내용을 입력해주세요.'; return; }
+    const { error } = await db.from('announcements').insert({ title, body, author_id: currentUser.id });
+    if (error) { errEl.style.display = 'block'; errEl.textContent = '등록 실패: ' + error.message; return; }
+    errEl.style.display = 'none';
+    document.getElementById('announcement-title-input').value = '';
+    document.getElementById('announcement-body-input').value = '';
+    document.getElementById('announcement-success').style.display = 'block';
+    setTimeout(() => document.getElementById('announcement-success').style.display = 'none', 2000);
+    document.getElementById('announcement-form').style.display = 'none';
+    loadAnnouncements();
+    showToast('공지가 등록되었습니다! 📢');
+  }
+
+  // ── 초기화 ────────────────────────────────
+  db.auth.onAuthStateChange(async (event, session) => {
+    currentUser = session?.user ?? null;
+    await checkExecutiveStatus();
+    updateNavAuth();
+  });
+
+  renderOfficers();
+  loadHomeStories();
+  updateStats();
 </script>
 </body>
 </html>
