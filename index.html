@@ -276,7 +276,7 @@
         <div class="modal-title">다시 만나요 👋</div>
         <div class="modal-subtitle">KSA 계정으로 로그인하세요</div>
         <div class="error-banner" id="login-error"></div>
-        <div class="form-field"><label class="form-label">이메일</label><input class="form-input" id="login-email" type="email" placeholder="이메일 입력"></div>
+        <div class="form-field"><label class="form-label">영어 이름</label><input class="form-input" id="login-name" placeholder="가입할 때 입력한 영문 이름"></div>
         <div class="form-field"><label class="form-label">비밀번호</label><input class="form-input" type="password" id="login-pw" placeholder="••••••"></div>
         <button class="btn-login" onclick="doLogin()">로그인</button>
         <div class="auth-switch">아직 회원이 아닌가요? <span onclick="switchTab('signup')">가입하기</span></div>
@@ -284,17 +284,16 @@
       <div id="form-signup">
         <div class="modal-title">KSA에 오신 걸 환영해요 🎉</div>
         <div class="modal-subtitle">간단한 정보로 가입하세요</div>
-        <div class="success-banner" id="signup-success">가입 완료! 이메일을 확인해주세요 📧</div>
+        <div class="success-banner" id="signup-success">가입 완료! 🎉</div>
         <div class="error-banner" id="signup-error"></div>
         <div class="form-field"><label class="form-label">영문 이름</label><input class="form-input" id="signup-name" placeholder="예: Minjun Kim"></div>
-        <div class="form-field"><label class="form-label">한국 이름 (선택)</label><input class="form-input" id="signup-korname" placeholder="예: 김민준"></div>
+        <div class="form-field"><label class="form-label">한국 이름</label><input class="form-input" id="signup-korname" placeholder="예: 김민준"></div>
         <div class="form-field"><label class="form-label">학년</label>
           <select class="form-input" id="signup-grade">
             <option value="">선택</option>
             <option>6th Grade</option><option>7th Grade</option><option>8th Grade</option><option>9th Grade</option>
           </select>
         </div>
-        <div class="form-field"><label class="form-label">이메일</label><input class="form-input" id="signup-email" type="email" placeholder="학교 이메일"></div>
         <div class="form-field"><label class="form-label">비밀번호</label><input class="form-input" type="password" id="signup-pw" placeholder="6자 이상"></div>
         <button class="btn-login" onclick="doSignup()">가입하기</button>
         <div class="auth-switch">이미 회원인가요? <span onclick="switchTab('login')">로그인</span></div>
@@ -319,6 +318,12 @@
 
   let currentUser = null;
   let isExecutive = false;
+
+  // ── 영어 이름 → 내부용 이메일 변환 (Supabase Auth용, 사용자에게 안 보임) ──
+  function toAuthEmail(name) {
+    const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return `${cleanName}@ksa.rumsey.internal`;
+  }
 
   // ── 회장단 소개 (profiles 테이블의 role='executive' 계정에서 가져옴) ──
   async function renderOfficers() {
@@ -435,7 +440,7 @@
   function updateNavAuth() {
     const area = document.getElementById('nav-auth-area');
     if (currentUser) {
-      const name = currentUser.user_metadata?.name || currentUser.email;
+      const name = currentUser.name;
       area.innerHTML = `<div class="nav-user"><div class="nav-user-avatar">${getInitials(name)}</div><span>${name}</span><button class="nav-logout" onclick="doLogout()">로그아웃</button></div>`;
     } else {
       area.innerHTML = `<button class="nav-btn" onclick="openModal('login')">가입 / 로그인</button>`;
@@ -443,23 +448,76 @@
     updateStats();
   }
 
+  // ── 비밀번호 해시 (SHA-256) ────────────────
+  async function hashPassword(pw) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   // ── 권한 확인 ─────────────────────────────
-  async function checkExecutiveStatus() {
-    if (!currentUser) { isExecutive = false; return; }
-    const { data } = await db.from('profiles').select('role').eq('id', currentUser.id).single();
-    isExecutive = data?.role === 'executive';
+  function checkExecutiveStatus() {
+    isExecutive = currentUser?.role === 'executive';
+  }
+
+  // ── 로그인 세션 유지 ───────────────────────
+  // 1) 진짜 Supabase Auth 세션이 있으면 그걸 우선 사용
+  // 2) 없으면 예전 방식(localStorage) 로그인 상태를 사용 (아직 마이그레이션 안 된 사용자)
+  function saveLegacySession(profile) { localStorage.setItem('ksa_user_id', profile.id); }
+  function clearLegacySession() { localStorage.removeItem('ksa_user_id'); }
+  async function restoreSession() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session?.user) {
+      const { data: profile } = await db.from('profiles').select('*').eq('auth_id', session.user.id).single();
+      if (profile) { currentUser = profile; checkExecutiveStatus(); updateNavAuth(); return; }
+    }
+    const id = localStorage.getItem('ksa_user_id');
+    if (!id) return;
+    const { data } = await db.from('profiles').select('*').eq('id', id).single();
+    if (data) { currentUser = data; checkExecutiveStatus(); updateNavAuth(); }
+    else clearLegacySession();
   }
 
   // ── 인증 ──────────────────────────────────
   async function doLogin() {
-    const email = document.getElementById('login-email').value.trim();
+    const name = document.getElementById('login-name').value.trim();
     const pw = document.getElementById('login-pw').value;
     const errEl = document.getElementById('login-error');
-    const { data, error } = await db.auth.signInWithPassword({ email, password: pw });
-    if (error) { errEl.style.display = 'block'; errEl.textContent = '이메일 또는 비밀번호가 틀렸습니다.'; return; }
+    if (!name) { errEl.style.display = 'block'; errEl.textContent = '영어 이름을 입력해주세요.'; return; }
+
+    // 1) 이미 Auth 계정으로 전환된 사용자인지 먼저 시도
+    const authEmail = toAuthEmail(name);
+    const { data: authData, error: authError } = await db.auth.signInWithPassword({ email: authEmail, password: pw });
+    if (!authError && authData.user) {
+      const { data: profile } = await db.from('profiles').select('*').eq('auth_id', authData.user.id).single();
+      if (profile) {
+        errEl.style.display = 'none';
+        currentUser = profile; checkExecutiveStatus();
+        updateNavAuth(); closeModal();
+        showToast(`환영해요! 👋`);
+        return;
+      }
+    }
+
+    // 2) Auth 계정이 아직 없으면 예전 방식(profiles.password)으로 확인
+    const { data: profile, error: lookupError } = await db.from('profiles').select('*').eq('name', name).single();
+    if (lookupError || !profile) { errEl.style.display = 'block'; errEl.textContent = '해당 이름의 계정을 찾을 수 없습니다.'; return; }
+    const pwHash = await hashPassword(pw);
+    if (pwHash !== profile.password) { errEl.style.display = 'block'; errEl.textContent = '이름 또는 비밀번호가 틀렸습니다.'; return; }
+
+    // 비밀번호 확인됐으니 이 시점에 진짜 Auth 계정으로 자동 전환(마이그레이션)
+    const { data: signUpData, error: signUpError } = await db.auth.signUp({
+      email: authEmail, password: pw,
+      options: { data: { name, kor_name: profile.kor_name, grade: profile.grade } }
+    });
+    if (!signUpError && signUpData.user) {
+      await db.from('profiles').update({ auth_id: signUpData.user.id }).eq('id', profile.id);
+      profile.auth_id = signUpData.user.id;
+    }
+
     errEl.style.display = 'none';
-    currentUser = data.user;
-    await checkExecutiveStatus();
+    currentUser = profile;
+    checkExecutiveStatus();
+    saveLegacySession(profile);
     updateNavAuth(); closeModal();
     showToast(`환영해요! 👋`);
   }
@@ -468,23 +526,33 @@
     const name = document.getElementById('signup-name').value.trim();
     const korName = document.getElementById('signup-korname').value.trim();
     const grade = document.getElementById('signup-grade').value;
-    const email = document.getElementById('signup-email').value.trim();
     const pw = document.getElementById('signup-pw').value;
     const errEl = document.getElementById('signup-error');
-    if (!name || !grade || !email || pw.length < 6) { errEl.style.display = 'block'; errEl.textContent = '모든 필수 항목을 입력해주세요.'; return; }
-    const { data, error } = await db.auth.signUp({
-      email, password: pw,
+    if (!name || !korName || !grade || pw.length < 6) { errEl.style.display = 'block'; errEl.textContent = '모든 필수 항목을 입력해주세요.'; return; }
+    const { data: existing } = await db.from('profiles').select('id').eq('name', name).maybeSingle();
+    if (existing) { errEl.style.display = 'block'; errEl.textContent = '이미 사용 중인 영어 이름이에요. 다른 이름(예: 중간이름 추가)을 써주세요.'; return; }
+
+    const authEmail = toAuthEmail(name);
+    const { data: authData, error: authError } = await db.auth.signUp({
+      email: authEmail, password: pw,
       options: { data: { name, kor_name: korName, grade } }
     });
-    if (error) { errEl.style.display = 'block'; errEl.textContent = error.message; return; }
-    // profiles 테이블에 저장
-    await db.from('profiles').insert({ id: data.user.id, name, kor_name: korName, grade, email });
+    if (authError) { errEl.style.display = 'block'; errEl.textContent = authError.message; return; }
+
+    const { data: profile, error: profileError } = await db.from('profiles')
+      .insert({ id: crypto.randomUUID(), auth_id: authData.user.id, name, kor_name: korName, grade })
+      .select().single();
+    if (profileError) { errEl.style.display = 'block'; errEl.textContent = '가입 실패: ' + profileError.message; return; }
     document.getElementById('signup-success').style.display = 'block';
     setTimeout(() => { closeModal(); document.getElementById('signup-success').style.display = 'none'; }, 2000);
+    currentUser = profile;
+    checkExecutiveStatus();
+    updateNavAuth();
   }
 
   async function doLogout() {
     await db.auth.signOut();
+    clearLegacySession();
     currentUser = null; isExecutive = false; updateNavAuth();
     showToast('로그아웃 되었습니다.');
   }
@@ -556,12 +624,7 @@
   }
 
   // ── 초기화 ────────────────────────────────
-  db.auth.onAuthStateChange(async (event, session) => {
-    currentUser = session?.user ?? null;
-    await checkExecutiveStatus();
-    updateNavAuth();
-  });
-
+  restoreSession();
   renderOfficers();
   loadHomeStories();
   updateStats();
