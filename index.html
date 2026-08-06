@@ -210,6 +210,7 @@
         <button class="btn-cancel" onclick="document.getElementById('write-form').style.display='none'">취소</button>
       </div>
     </div>
+    <div class="error-banner" id="stories-error"></div>
     <div class="story-grid" id="all-stories"><p class="loading-msg">불러오는 중...</p></div>
   </div>
 </div>
@@ -381,18 +382,42 @@
     </div>`;
   }
 
+  // ★ 에러를 사람이 읽을 수 있는 문자열로 변환 (message/code/details/hint가 없는
+  //    형태의 에러 객체도 그대로 JSON으로 풀어서 화면/콘솔에 보이도록 함)
+  function describeError(error) {
+    if (!error) return '알 수 없는 오류';
+    const msg = error.message || error.msg || error.error_description || error.error || '';
+    const code = error.code ? ` (code: ${error.code})` : '';
+    if (msg) return msg + code;
+    try { return JSON.stringify(error); } catch (e) { return String(error); }
+  }
+
   async function loadHomeStories() {
-    const { data } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false }).limit(2);
+    const { data, error } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false }).limit(2);
     const el = document.getElementById('home-stories');
+    if (error) { const msg = describeError(error); console.error('loadHomeStories error:', msg); el.innerHTML = '<p class="empty-msg">스토리를 불러오지 못했습니다: ' + msg + '</p>'; return; }
     if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">아직 스토리가 없어요!</p>'; return; }
     el.innerHTML = data.map(s => renderStoryCard({ ...s, ...s.profiles }, `showDetail('${s.id}')`)).join('');
   }
 
+  // ★ 수정: error를 명시적으로 잡아서 화면에 표시 (RLS 등으로 조회가 막히면
+  //          기존 코드는 이유 없이 "스토리가 없어요"라고만 나와서 원인 파악이 안 됐음)
   async function loadAllStories() {
-    const { data } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false });
     const el = document.getElementById('all-stories');
-    if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">아직 스토리가 없어요!</p>'; return; }
-    el.innerHTML = data.map(s => renderStoryCard({ ...s, ...s.profiles }, `showDetail('${s.id}')`)).join('');
+    const errEl = document.getElementById('stories-error');
+    errEl.style.display = 'none';
+    const { data, error } = await db.from('stories').select('*, profiles(name, kor_name, grade)').order('created_at', { ascending: false });
+    if (error) {
+      const msg = describeError(error);
+      console.error('loadAllStories error:', msg);
+      errEl.style.display = 'block';
+      errEl.textContent = '스토리를 불러오지 못했습니다: ' + msg;
+      el.innerHTML = '';
+    } else if (!data || !data.length) {
+      el.innerHTML = '<p class="empty-msg">아직 스토리가 없어요!</p>';
+    } else {
+      el.innerHTML = data.map(s => renderStoryCard({ ...s, ...s.profiles }, `showDetail('${s.id}')`)).join('');
+    }
     document.getElementById('write-story-btn').style.display = currentUser ? 'inline-block' : 'none';
   }
 
@@ -437,6 +462,8 @@
   }
 
   // ── 네비 업데이트 ─────────────────────────
+  // ★ 수정: 로그인/로그아웃 시점에 지금 보고 있는 페이지가 스토리/공지사항이면
+  //          해당 목록을 다시 불러와서 작성 버튼과 데이터가 즉시 반영되도록 함
   function updateNavAuth() {
     const area = document.getElementById('nav-auth-area');
     if (currentUser) {
@@ -446,6 +473,13 @@
       area.innerHTML = `<button class="nav-btn" onclick="openModal('login')">가입 / 로그인</button>`;
     }
     updateStats();
+
+    if (document.getElementById('page-announcements').classList.contains('active')) {
+      loadAnnouncements();
+    }
+    if (document.getElementById('page-stories').classList.contains('active')) {
+      loadAllStories();
+    }
   }
 
   // ── 권한 확인 ─────────────────────────────
@@ -592,10 +626,11 @@
   }
 
   async function loadAnnouncements() {
-    const { data } = await db.from('announcements').select('*, profiles(name, kor_name)').order('created_at', { ascending: false });
+    const { data, error } = await db.from('announcements').select('*, profiles(name, kor_name)').order('created_at', { ascending: false });
     const el = document.getElementById('announcement-list');
-    if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">등록된 공지가 없어요!</p>'; return; }
-    el.innerHTML = data.map(renderAnnouncementCard).join('');
+    if (error) { const msg = describeError(error); console.error('loadAnnouncements error:', msg); el.innerHTML = '<p class="empty-msg">공지를 불러오지 못했습니다: ' + msg + '</p>'; }
+    else if (!data || !data.length) { el.innerHTML = '<p class="empty-msg">등록된 공지가 없어요!</p>'; }
+    else { el.innerHTML = data.map(renderAnnouncementCard).join(''); }
     document.getElementById('write-announcement-btn').style.display = isExecutive ? 'inline-block' : 'none';
   }
 
